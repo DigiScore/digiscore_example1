@@ -31,7 +31,7 @@ class Main:
 
         # build digital score UI
         self.make_UI()
-        self.beat = 1
+        self.beat = 0
 
         # build first bar
         self.audiodata = self.ear.read()
@@ -55,11 +55,8 @@ class Main:
             # position in bar
             pos_x = Mm(note_duration_sum) + start_pos
 
-            # # 70% chance of note or rest
-            # if random() >= 0.3:
-
             # get a random note from original source list,
-            name, pitches, raw_duration = self.get_note()[0:3]
+            event_type, pitches, raw_duration = self.get_note()[0:3]
 
             # double length of original duration
             raw_duration *= 2
@@ -80,11 +77,13 @@ class Main:
                 breakflag = True
 
             # add the note/rest to the score and to the note list
+            # todo - sort chord lablelling
+            t = Text((pos_x, Mm(0)), self.staff, event_type)
             n = Chordrest(pos_x, self.staff, pitches, neoduration)
             if bar == 1:
-                self.notes_on_staff_list_1.append(n)
+                self.notes_on_staff_list_1.append([t, n])
             else:
-                self.notes_on_staff_list_2.append(n)
+                self.notes_on_staff_list_2.append([t, n])
 
             # if end of bar length: break
             if breakflag:
@@ -173,21 +172,29 @@ class Main:
         self.conductor_list[beat-1].scale = 3
 
     def refresh_func(self, time):
+        block = True
         # calc which beat and change score
         now_beat = (int(time) % 8) + 1  # 8 beats = 2 bars
         if now_beat != self.beat:
             self.change_beat(now_beat)
             self.beat = now_beat
+            block = False
         if now_beat == 1:
-            self.bar_indicator.pos = (Mm(0), Mm(20))
-            for n in self.notes_on_staff_list_2:
-                n.remove()
-            self.build_bar(2)
+            if not block:
+                self.bar_indicator.pos = (Mm(0), Mm(20))
+                for l in self.notes_on_staff_list_2:
+                    print(l)
+                    for e in l:
+                        e.remove()
+                self.build_bar(2)
         elif now_beat == 5:
-            self.bar_indicator.pos = (Mm(90), Mm(20))
-            for n in self.notes_on_staff_list_1:
-                n.remove()
-            self.build_bar(1)
+            if not block:
+                self.bar_indicator.pos = (Mm(90), Mm(20))
+                for l in self.notes_on_staff_list_1:
+                    print(l)
+                    for e in l:
+                        e.remove()
+                self.build_bar(1)
 
 
 if __name__ == "__main__":
