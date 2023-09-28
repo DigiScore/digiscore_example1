@@ -78,7 +78,8 @@ class Main:
 
             # add the note/rest to the score and to the note list
             # todo - sort chord lablelling
-            t = Text((pos_x, Mm(0)), self.staff, event_type)
+            if len(event_type) > 4:
+                t = Text((pos_x, Mm(0)), self.staff, event_type)
             n = Chordrest(pos_x, self.staff, pitches, neoduration)
             if bar == 1:
                 self.notes_on_staff_list_1.append([t, n])
