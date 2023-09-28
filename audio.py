@@ -49,6 +49,7 @@ class Listener:
                 # Calculates the frequency from with the peak ws
 
                 # todo swap this for Librosa
+                # todo - add pydub to playback samples and midi playback via fluidsynth &
 
 
                 data = data * np.hanning(len(data))
