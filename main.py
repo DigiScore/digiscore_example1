@@ -1,9 +1,11 @@
-import midi_data
+import midi
 from random import random, choice, seed
 from time import sleep
 
+from sound import Sound
+
 from random import choice
-from audio import Listener
+from audio import Audio
 
 from neoscore.core import neoscore
 from neoscore.core.rich_text import RichText
@@ -19,12 +21,12 @@ from neoscore.western.pedal_line import PedalLine
 
 class Main:
     def __init__(self, source_midi):
-        # start brainbit reading
-        self.ear = Listener()
+        # start audio listener
+        self.ear = Audio()
         self.ear.start()
 
         # get all midi note lists for s a t b
-        self.midilist = midi_data.get_midi_lists(source_midi)
+        self.midilist = midi.get_midi_lists(source_midi)
 
         # start neoscore
         neoscore.setup()
@@ -38,6 +40,10 @@ class Main:
         self.beat_size = 20
         self.build_bar(1)
         self.build_bar(2)
+
+        # start sound design
+        self.sound_design = Sound()
+        self.sound_design.start()
 
     def build_bar(self, bar):
         if bar == 1:
@@ -199,6 +205,6 @@ class Main:
 
 
 if __name__ == "__main__":
-    run = Main("A Sleepin' Bee.mid")
+    run = Main("data/midi/A Sleepin' Bee.mid")
     neoscore.show(run.refresh_func,
                   display_page_geometry=False)

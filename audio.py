@@ -6,7 +6,7 @@ import numpy as np
 import math
 from threading import Thread
 
-class Listener:
+class Audio:
     def __init__(self):
         """controls audio listening"""
 
@@ -119,7 +119,7 @@ class Listener:
 
 
 if __name__ == "__main__":
-    mic = Listener()
+    mic = Audio()
     mic.start()
     while True:
         data = mic.read()
