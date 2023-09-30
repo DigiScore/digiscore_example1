@@ -47,11 +47,6 @@ class Audio:
                 bars = "#" * int(50 * peak / 2 ** 16)
 
                 # Calculates the frequency from with the peak ws
-
-                # todo swap this for Librosa
-                # todo - add pydub to playback samples and midi playback via fluidsynth &
-
-
                 data = data * np.hanning(len(data))
                 fft = abs(np.fft.fft(data).real)
                 fft = fft[:int(len(fft) / 2)]

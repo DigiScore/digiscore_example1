@@ -22,8 +22,8 @@ from neoscore.western.pedal_line import PedalLine
 class Main:
     def __init__(self, source_midi):
         # start audio listener
-        self.ear = Audio()
-        self.ear.start()
+        self.listener = Audio()
+        self.listener.start()
 
         # get all midi note lists for s a t b
         self.midilist = midi.get_midi_lists(source_midi)
@@ -36,7 +36,7 @@ class Main:
         self.beat = 0
 
         # build first bar
-        self.audiodata = self.ear.read()
+        self.audiodata = self.listener.read()
         self.beat_size = 20
         self.build_bar(1)
         self.build_bar(2)
@@ -83,14 +83,13 @@ class Main:
                 breakflag = True
 
             # add the note/rest to the score and to the note list
-            # todo - sort chord lablelling
-            if len(event_type) > 4:
-                t = Text((pos_x, Mm(0)), self.staff, event_type)
+            # if len(event_type) > 4:
+            #     t = Text((pos_x, Mm(0)), self.staff, event_type)
             n = Chordrest(pos_x, self.staff, pitches, neoduration)
             if bar == 1:
-                self.notes_on_staff_list_1.append([t, n])
+                self.notes_on_staff_list_1.append([n])
             else:
-                self.notes_on_staff_list_2.append([t, n])
+                self.notes_on_staff_list_2.append([n])
 
             # if end of bar length: break
             if breakflag:
@@ -127,7 +126,7 @@ class Main:
             print("MIDI", new_note)
 
         else:
-            new_note = self.ear.read()
+            new_note = self.listener.read()
             print("EAR", new_note)
         return new_note
 
@@ -141,7 +140,6 @@ class Main:
 
         # make 4 2 bar staves
         self.staff = Staff((ZERO, Mm(70)), None, Mm(180))
-
 
         # add barlines
         Barline(Mm(90), [self.staff])
@@ -205,6 +203,6 @@ class Main:
 
 
 if __name__ == "__main__":
-    run = Main("data/midi/A Sleepin' Bee.mid")
+    run = Main("data/midi/A_Sleepin_Bee.mid")
     neoscore.show(run.refresh_func,
                   display_page_geometry=False)
